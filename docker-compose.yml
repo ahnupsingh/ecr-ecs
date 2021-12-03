@@ -2,12 +2,25 @@
 version: '3.7'
 
 services:
+
   web:
-    build: .
+    build: ./compose/django
     command: python /code/manage.py runserver 0.0.0.0:8000
+    image: hello_world
     volumes:
       - .:/code
     ports:
       - 8000:8000
     expose:
-    - "8000"
+    - 8000
+    restart: "on-failure"
+
+  
+  nginx:
+    build: ./compose/nginx
+    image: hello_world_nginx
+    ports:
+      - 80:80
+    depends_on:
+      - web
+    restart: "on-failure"
